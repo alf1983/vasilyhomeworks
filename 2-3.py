@@ -1,40 +1,29 @@
-sentence_list = ['в', '5', 'часов', '17', 'минут', 'температура', 'воздуха', 'была', '+5', 'градусов']
-index = 0
-while index < len(sentence_list):
-    if sentence_list[index].isdigit():
-        if len(sentence_list[index]) < 2:
-            sentence_list[index] = '0' + sentence_list[index]
-        sentence_list.insert(index, '"')
-        sentence_list.insert(index + 2, '"')
-        index += 3
-    elif any(map(str.isdigit, sentence_list[index])):
-        if len(sentence_list[index]) < 3:
-            sing = sentence_list[index][0]
-            degrees = '0' + sentence_list[index][1]
-            sentence_list[index] = sing + degrees
-        sentence_list.insert(index, '"')
-        sentence_list.insert(index + 2, '"')
-        index += 3
-    else:
-        # sentence_list[index] += " "
-        index += 1
-print(sentence_list)
-quotes = 1
-sentence = ''
-index = 0
-while index < len(sentence_list) - 1:
-    if sentence_list[index] != '"':
-        if sentence_list[index + 1] != '"':
-            sentence += sentence_list[index] + ' '
+def thesaurus_adv(*args):
+    name_book = {}
+    # args = list(args)
+    # args.sort()
+    for _name in args:
+        first_name, surname = _name.split(" ")
+        # оставил свой вариант но с setdefault (решение увидел на разборе ДЗ) конечно красивее
+        if name_book.get(surname[0].upper()) is None:
+            name_book[surname[0].upper()] = {}
+        if name_book[surname[0].upper()].get(first_name[0].upper()):
+            name_book[surname[0].upper()][first_name[0].upper()].append(_name)
         else:
-            sentence += sentence_list[index]
-    else:
-        if quotes % 2 == 0:
-            sentence += sentence_list[index] + " "
-        else:
-            sentence += " " + sentence_list[index]
-        quotes += 1
-    index += 1
-sentence += sentence_list[index]
-# print(dir(sentence)) можно использовать replace но это не честно
-print(sentence)
+            name_book[surname[0].upper()][first_name[0].upper()] = [_name]
+    # раздумья о сортировке
+    # list_of_keys_surname = list(name_book.keys())
+    # list_of_keys_surname.sort()
+    # name_book_sorted = {}
+    # # print(name_book)
+    # for key_surname in list_of_keys_surname:
+    #     list_of_keys_first_name = list(name_book[key_surname])
+    #     list_of_keys_first_name.sort()
+    #     # print(list_of_keys_first_name)
+    #     for key_first_name in list_of_keys_first_name:
+    #         name_book_sorted[key_surname][key_first_name] = \
+    #             name_book.get(key_surname, "buy").get(key_first_name, "hello")
+    return name_book
+
+
+print(thesaurus_adv("Иван Сергеев", "Инна Серова", "Петр Алексеев", "Илья Иванов", "Анна Савельева"))
